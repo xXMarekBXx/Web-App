@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Income</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1> Add Income</h1>
+    <form>
+        <p>
+            <label for="amount">Amount:</label>
+            <input id="amount" type="text" placeholder="amount" name="amount">
+        </p>
+        <p>
+            <label for="date">Enter the Incomes date:</label>
+            <input id="date" type="date" name="date" value="2022-10-01">
+        </p>
+        <p>Select Category:</p>
+        <div>
+            <label for="salary">Salary</label>
+            <input type="radio" name="income" id="salary" value="salary">
+        </div>
+        <div>
+            <label for="bankInterest">Bank interest</label>
+            <input type="radio" name="income" id="bankInterest" value="bankInterest">
+        </div>
+        <div>
+            <label for="saleOnAllegro">Sale on Allegro</label>
+            <input type="radio" name="income" id="saleOnAllegro" value="saleOnAllegro">
+        </div>
+        <div>
+            <label for="other">Other</label>
+            <input type="radio" name="income" id="other" value="other">
+        </div>
+        <p>
+            <label for="comment">Comment:</label>
+            <input id="comment" type="text" placeholder="comment" name="comment">
+        </p>
+        <button>Add</button>
+        <button>Cancel</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1> Add Expense</h1>
+    <form>
+        <p>
+            <label for="amount">Amount:</label>
+            <input id="amount" type="text" placeholder="amount" name="amount">
+        </p>
+        <p>
+            <label for="date">Enter the Incomes date:</label>
+            <input id="date" type="date" name="date" value="2022-10-01">
+        </p>
+        <p>Select payment method:</p>
+        <div>
+            <label for="cash">Cash</label>
+            <input type="radio" name="paymentMethod" id="cash" value="cash">
+        </div>
+        <div>
+            <label for="debitCard">Debit card</label>
+            <input type="radio" name="paymentMethod" id="debitCard" value="debitCard">
+        </div>
+        <div>
+            <label for="creditCard">Credit card</label>
+            <input type="radio" name="paymentMethod" id="creditCard" value="creditCard">
+        </div>
+        <p>Select Category:</p>
+        <div>
+            <label for="food">Food</label>
+            <input type="radio" name="category" id="food" value="food">
+        </div>
+        <div>
+            <label for="apertment">Apertment</label>
+            <input type="radio" name="category" id="apartment" value="apartment">
+        </div>
+        <div>
+            <label for="transport">Transport</label>
+            <input type="radio" name="category" id="transport" value="transport">
+        </div>
+        <div>
+            <label for="telecommunication">Telecommunication</label>
+            <input type="radio" name="category" id="telecommunication" value="telecommunication">
+        </div>
+        <div>
+            <label for="healthcare">Healthcare</label>
+            <input type="radio" name="category" id="healthcare" value="healthcare">
+        </div>
+        <div>
+            <label for="clothes">Clothes</label>
+            <input type="radio" name="category" id="clothes" value="clothes">
+        </div>
+        <div>
+            <label for="hygiene">Hygiene</label>
+            <input type="radio" name="category" id="hygiene" value="hygiene">
+        </div>
+        <div>
+            <label for="kids">Kids</label>
+            <input type="radio" name="category" id="kids" value="kids">
+        </div>
+        <div>
+            <label for="entertainment">Entertainment</label>
+            <input type="radio" name="category" id="entertainment" value="entertainment">
+        </div>
+        <div>
+            <label for="tour">Tour</label>
+            <input type="radio" name="category" id="tour" value="tour">
+        </div>
+        <div>
+            <label for="trainings">Trainings</label>
+            <input type="radio" name="category" id="trainings" value="trainings">
+        </div>
+        <div>
+            <label for="books">Books</label>
+            <input type="radio" name="category" id="books" value="books">
+        </div>
+        <div>
+            <label for="savings">Savings</label>
+            <input type="radio" name="category" id="savings" value="savings">
+        </div>
+        <div>
+            <label for="retirement">For golden autumn - retirement</label>
+            <input type="radio" name="category" id="retirement" value="retirement">
+        </div>
+        <div>
+            <label for="debtRepayment">Debt repayment</label>
+            <input type="radio" name="category" id="repayment" value="repayment">
+        </div>
+        <div>
+            <label for="donation">Donation</label>
+            <input type="radio" name="category" id="donation" value="donation">
+        </div>
+        <div>
+            <label for="other">Other</label>
+            <input type="radio" name="category" id="other" value="other">
+        </div>
+        <p>
+            <label for="comment">Comment:</label>
+            <input id="comment" type="text" placeholder="comment" name="comment">
+        </p>
+        <button>Add</button>
+        <button>Cancel</button>
+    </form>
+</body>
+
+</html>
