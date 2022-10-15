@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1> Add Expense</h1>
+    <form>
+        <p>
+            <label for="amount">Amount:</label>
+            <input id="amount" type="number" placeholder="amount" name="amount" step="00.1" required>
+        </p>
+        <p>
+            <label for="date">Enter the Incomes date:</label>
+            <input id="date" type="date" name="date" value="2022-10-01" min="2000-01-01">
+        </p>
+
+        <p>
+            <label for="peymentMethodSelection">Select payment method:</label>
+        </p>
+
+        <p>
+            <select name="selectCategory" id="selectCategory">
+                <option value="cash">Cash</option>
+                <option value="debitCard">Debit card</option>
+                <option value="creditCard">Credit card</option>
+            </select>
+        </p>
+
+        <p>
+            <label for="categorySelection">Select Category:</label>
+        </p>
+
+        <p>
+            <select name="selectItem" id="selectItem">
+                <option value="food">Food</option>
+                <option value="apertment">Apertment</option>
+                <option value="transport">Transport</option>
+                <option value="telecommunication">Telecommunication</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="clothes">Clothes</option>
+                <option value="hygiene">Hygiene</option>
+                <option value="kids">Kids</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="tour">Tour</option>
+                <option value="trainings">Trainings</option>
+                <option value="books">Books</option>
+                <option value="savings">Savings</option>
+                <option value="retirement">For golden autumn - retirement</option>
+                <option value="debtRepayment">Debt repayment</option>
+                <option value="donation">Donation</option>
+                <option value="other">Other</option>
+
+            </select>
+        </p>
+
+        <p>
+            <label for="comment">Comment:</label>
+        </p>
+        <textarea id="comment" rows="4" cols="50"></textarea>
+        <p>
+            <button>Add</button>
+            <button>Cancel</button>
+        </p>
+
+    </form>
+</body>
+
+</html>
