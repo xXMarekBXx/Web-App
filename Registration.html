@@ -9,23 +9,27 @@
 </head>
 
 <body>
-    <h1> Create an Account</h1>
+    <h1 class="gradient-text"> Create an Account</h1>
 
-    <h2> For Register Enter Your Date Below</h2>
+    <h2 class="gradient-text"> For Register Enter Your Date Below</h2>
     <form>
         <p>
             <label for="name">Name:</label>
-            <input id="name" type="text" placeholder="name" name="name">
+            <input id="name" type="text" placeholder="name" name="name" required>
         </p>
         <p>
             <label for="email">Email:</label>
-            <input id="email" type="text" placeholder="email" name="email">
+            <input id="email" type="email" placeholder="email" name="email" required>
         </p>
         <p>
             <label for="pass">Password:</label>
-            <input id="pass" type="password" placeholder="password" name="pass">
+            <input id="pass" type="password" placeholder="password" name="pass" required>
         </p>
-        <button>Register</button>
+        <p>
+            <button>
+                <a href="LogIn.html" type="button" class="button">Register </a>
+            </button>
+        </p>
     </form>
 </body>
 

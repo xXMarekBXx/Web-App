@@ -12,7 +12,7 @@
     <form>
         <h1> Your balance sheet</h1>
         <label for="periodSelection">Select a period:</label>
-        <select name="period" id="period">
+        <select name="period" id="period" required>
             <option value="Current month">Current month</option>
             <option value="Last month">Last month</option>
             <option value="Current year">Current year</option>
@@ -119,6 +119,9 @@
         <p>
             <label for="date">Congratulations. You manage your finances great!</label>
         </p>
+        <button>
+            <a href="Menu.html" type="button" class="button">Cancel</a>
+        </button>
     </form>
 </body>
 

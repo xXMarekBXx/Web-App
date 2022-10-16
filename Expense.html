@@ -13,7 +13,7 @@
     <form>
         <p>
             <label for="amount">Amount:</label>
-            <input id="amount" type="number" placeholder="amount" name="amount" step="00.1" required>
+            <input id="amount" type="number" placeholder="amount" name="amount" step="00.1" min="0" required>
         </p>
         <p>
             <label for="date">Enter the Incomes date:</label>
@@ -25,7 +25,7 @@
         </p>
 
         <p>
-            <select name="selectCategory" id="selectCategory">
+            <select name="selectCategory" id="selectCategory" required>
                 <option value="cash">Cash</option>
                 <option value="debitCard">Debit card</option>
                 <option value="creditCard">Credit card</option>
@@ -37,7 +37,7 @@
         </p>
 
         <p>
-            <select name="selectItem" id="selectItem">
+            <select name="selectItem" id="selectItem" required>
                 <option value="food">Food</option>
                 <option value="apertment">Apertment</option>
                 <option value="transport">Transport</option>
@@ -64,8 +64,10 @@
         </p>
         <textarea id="comment" rows="4" cols="50"></textarea>
         <p>
-            <button>Add</button>
-            <button>Cancel</button>
+            <button type="button" class="button">Add</button>
+            <button>
+                <a href="Menu.html" type="button" class="button">Cancel</a>
+            </button>
         </p>
 
     </form>
