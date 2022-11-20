@@ -3,7 +3,6 @@ body {
     letter-spacing: 1px;
     font-size: 20px;
     font-family: 'Times New Roman', Times, serif;
-    margin: auto;
     background: black;
 }
 
@@ -52,6 +51,10 @@ table {
     position: relative;
     z-index: 0;
     border-radius: 10px;
+}
+
+button.style {
+    width: 100%;
 }
 
 .button:before {
