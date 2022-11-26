@@ -42,7 +42,7 @@ table {
 .button {
     display: inline-block;
     font-size: 23px;
-    width: 1000px;
+    width: 100%;
     border: none;
     outline: none;
     color: lightskyblue;
@@ -53,7 +53,7 @@ table {
     border-radius: 10px;
 }
 
-button.style {
+.buttonStyle {
     width: 100%;
 }
 
