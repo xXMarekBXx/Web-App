@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Add Income</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -21,7 +20,7 @@
             </p>
             <p>
                 <label for="date">Enter the Incomes date:</label>
-                <input id="date" type="date" name="date" value="2022-10-01" min="2000-01-01">
+                <input id="date" type="date" name="date" value="2024-09-13" min="2000-01-01">
             </p>
             <label for="categorySelection">Select Category:</label>
             <p>
@@ -32,7 +31,10 @@
                     <option value="other">Other</option>
                 </select>
             </p>
-            <button type="button" class="button">Add</button>
+            <!-- Zmieniamy przycisk Add na przycisk z linkiem, podobnie jak Cancel -->
+            <button class="buttonStyle">
+                <a href="#" type="button" class="button">Add</a>
+            </button>
             <button class="buttonStyle">
                 <a href="Menu.html" type="button" class="button">Cancel</a>
             </button>
