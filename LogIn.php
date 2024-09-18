@@ -1,3 +1,58 @@
+<?php
+session_start();
+require_once "connect.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+{
+    $login = $_POST['userName'];
+    $email = $_POST['userEmail'];
+    $pass = $_POST['userPass'];
+
+    $connection = new mysqli($host, $db_user, $db_password, $db_name);
+
+    if ($connection->connect_errno != 0) 
+    {
+        echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
+    } 
+    else 
+    {       
+        $stmt = $connection->prepare("SELECT id, username, password FROM users WHERE username = ? AND email = ?");
+        $stmt->bind_param("ss", $login, $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) 
+        {
+            $stmt->bind_result($user_id, $username, $hashed_password);
+            $stmt->fetch();
+
+            if (password_verify($pass, $hashed_password)) 
+            {
+                
+                $_SESSION['loggedin'] = true;
+                $_SESSION['username'] = $username;
+                $_SESSION['user_id'] = $user_id;
+
+                header("Location: Menu.php");
+                exit();
+            } 
+            else 
+            {
+                $_SESSION['login_error'] = true;
+            }
+        } 
+        else 
+        {
+            $_SESSION['login_error'] = true;
+        }
+
+        $stmt->close();
+    }
+
+    $connection->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,31 +72,25 @@
         <h2 class="gradient-text">If you already have an account, log in here</h2>
 
         <?php
-        session_start();
-
         if (isset($_SESSION['login_error'])) 
         {
             echo '<p style="color: red;">Incorrect credentials. Please try again.</p>';
             unset($_SESSION['login_error']);
         }
-
-        $previousUsername = isset($_SESSION['previousUsername']) ? htmlspecialchars($_SESSION['previousUsername']) : '';
-        $previousEmail = isset($_SESSION['previousEmail']) ? htmlspecialchars($_SESSION['previousEmail']) : '';
-        $previousPassword = isset($_SESSION['previousPassword']) ? htmlspecialchars($_SESSION['previousPassword']) : '';
         ?>
 
-        <form action="Menu.php" method="post">
+        <form action="LogIn.php" method="post">
             <p>
                 <label for="userName">Name:</label>
-                <input id="userName" type="text" placeholder="user name" name="userName" value="<?php echo $previousUsername; ?>" required>
+                <input id="userName" type="text" placeholder="user name" name="userName" required>
             </p>
             <p>
                 <label for="userEmail">Email:</label>
-                <input id="userEmail" type="email" placeholder="user email" name="userEmail" value="<?php echo $previousEmail; ?>" required>
+                <input id="userEmail" type="email" placeholder="user email" name="userEmail" required>
             </p>
             <p>
                 <label for="userPass">Password:</label>
-                <input id="userPass" type="password" placeholder="password" name="userPass" value="<?php echo $previousPassword; ?>" required>
+                <input id="userPass" type="password" placeholder="password" name="userPass" required>
             </p>
 
             <p>

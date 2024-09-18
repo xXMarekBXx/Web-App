@@ -2,77 +2,35 @@
 session_start();
 require_once "connect.php";
 
-// Create a new connection to the database
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) 
+{
+    header("Location: LogIn.php");
+    exit();
+}
+
 $connection = new mysqli($host, $db_user, $db_password, $db_name);
 
 if ($connection->connect_errno != 0) {
     echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
-} else {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Handle logout
+} 
+else
+{
+    if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    {
+        
         if (isset($_POST['logout']) && $_POST['logout'] == 'true') {
             session_unset();
             session_destroy();
             header("Location: LogIn.php");
             exit();
         }
-
-        // Retrieve login details from POST request
-        $login = $_POST['userName'];
-        $email = $_POST['userEmail'];
-        $pass = $_POST['userPass'];
-
-        // Use prepared statements to prevent SQL Injection
-        $stmt = $connection->prepare("SELECT username, password FROM users WHERE username = ? AND email = ?");
-        $stmt->bind_param("ss", $login, $email);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($username, $hashed_password);
-            $stmt->fetch();
-
-            // Verify the password
-            if (password_verify($pass, $hashed_password)) {
-                $_SESSION['loggedin'] = true;
-                $_SESSION['username'] = $username;
-                $_SESSION['email'] = $email;
-
-                // Clear previous login attempts
-                unset($_SESSION['previousUsername']);
-                unset($_SESSION['previousEmail']);
-                unset($_SESSION['previousPassword']);
-
-                echo '<h1 class="gradient-text">Welcome, ' . htmlspecialchars($_SESSION['username']) . '!</h1>';
-                echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
-            } else {
-                $_SESSION['login_error'] = true;
-                $_SESSION['previousUsername'] = $login;
-                $_SESSION['previousEmail'] = $email;
-                $_SESSION['previousPassword'] = $pass;
-
-                header("Location: LogIn.php");
-                exit();
-            }
-        } else {
-            $_SESSION['login_error'] = true;
-            $_SESSION['previousUsername'] = $login;
-            $_SESSION['previousEmail'] = $email;
-            $_SESSION['previousPassword'] = $pass;
-
-            header("Location: LogIn.php");
-            exit();
-        }
-
-        $stmt->close(); // Close the prepared statement
-    } else {
-        $_SESSION['login_error'] = true;
-        header("Location: LogIn.php");
-        exit();
     }
 
-    $connection->close();
+    $username = $_SESSION['username'];
+    $user_id = $_SESSION['user_id'];
 }
+
+$connection->close();
 ?>
 
 <!DOCTYPE html>
@@ -89,28 +47,37 @@ if ($connection->connect_errno != 0) {
 
 <body>
     <main>
-        <h1 class="gradient-text">MENU</h1>
-        <h1 class="gradient-text">-----------------------------------------------------</h1>
+        <?php
+        
+        if (isset($_SESSION['username']) && isset($_SESSION['user_id'])) 
+        {
+            echo '<h1 class="gradient-text">Welcome, ' . htmlspecialchars($_SESSION['username']) . '! Your ID: ' . htmlspecialchars($_SESSION['user_id']) . '</h1>';
+            echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
+            echo '<h1 class="gradient-text">MENU</h1>';
+            echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
+        } 
+        ?>
+
         <h2 class="gradient-text">Choose one of the options:</h2>
 
         <p>
             <button class="buttonStyle">
-                <a href="Income.html" type="button" class="button">Add Income</a>
+                <a href="Income.php" type="button" class="button">Add Income</a>
             </button>
         </p>
         <p>
             <button class="buttonStyle">
-                <a href="Expense.html" type="button" class="button">Add Expense</a>
+                <a href="Expense.php" type="button" class="button">Add Expense</a>
             </button>
         </p>
         <p>
             <button class="buttonStyle">
-                <a href="BalanceSheet.html" type="button" class="button">View the balance sheet</a>
+                <a href="BalanceSheet.php" type="button" class="button">View the balance sheet</a>
             </button>
         </p>
         <p>
             <button class="buttonStyle">
-                <a href="Settings.html" type="button" class="button">Settings</a>
+                <a href="Settings.php" type="button" class="button">Settings</a>
             </button>
         </p>
 

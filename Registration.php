@@ -20,7 +20,6 @@
         session_start();
         require_once "connect.php";
 
-        // Function to validate password
         function validate_password($password) 
         {
             return preg_match('/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/', $password);
@@ -29,26 +28,27 @@
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") 
         {
-            // Check if the required POST variables are set
             if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['pass'])) 
             {
                 $name = $_POST['name'];
                 $email = $_POST['email'];
                 $pass = $_POST['pass'];
 
-                // Validate password
-                if (!validate_password($pass)) {
+                if (!validate_password($pass)) 
+                {
                     echo '<p style="color: red;">Password must be at least 8 characters long and include both letters and numbers.</p>';
-                } else {
-                    // Create a new connection
+                } 
+                else 
+                {
+
                     $connection = new mysqli($host, $db_user, $db_password, $db_name);
 
                     if ($connection->connect_errno != 0) 
                     {
                         echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
-                    } else 
+                    } 
+                    else 
                     {
-                        // Check if username or email already exists
                         $stmt = $connection->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
                         $stmt->bind_param("ss", $name, $email);
                         $stmt->execute();
@@ -60,19 +60,17 @@
                         } 
                         else 
                         {
-                            // Hash the password
                             $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
 
-                            // Insert new user into database
                             $stmt = $connection->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
                             $stmt->bind_param("sss", $name, $email, $hashed_password);
 
                             if ($stmt->execute()) 
                             {
-                                // Redirect to LogIn.php after successful registration
                                 header("Location: LogIn.php");
                                 exit();
-                            } else 
+                            } 
+                            else 
                             {
                                 echo '<p style="color: red;">Registration failed. Please try again.</p>';
                             }
