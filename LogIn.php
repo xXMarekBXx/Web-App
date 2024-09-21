@@ -4,52 +4,55 @@ require_once "connect.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
 {
-    $login = $_POST['userName'];
-    $email = $_POST['userEmail'];
-    $pass = $_POST['userPass'];
+    $login = trim($_POST['userName']);
+    $email = trim($_POST['userEmail']);
+    $pass = trim($_POST['userPass']);
 
-    $connection = new mysqli($host, $db_user, $db_password, $db_name);
+    if (empty($login) || empty($email) || empty($pass)) {
+        $_SESSION['login_error'] = 'empty_fields';
+    } else {
+        $connection = new mysqli($host, $db_user, $db_password, $db_name);
 
-    if ($connection->connect_errno != 0) 
-    {
-        echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
-    } 
-    else 
-    {       
-        $stmt = $connection->prepare("SELECT id, username, password FROM users WHERE username = ? AND email = ?");
-        $stmt->bind_param("ss", $login, $email);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) 
+        if ($connection->connect_errno != 0) 
         {
-            $stmt->bind_result($user_id, $username, $hashed_password);
-            $stmt->fetch();
+            echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
+        } 
+        else 
+        {       
+            $stmt = $connection->prepare("SELECT id, username, password FROM users WHERE username = ? AND email = ?");
+            $stmt->bind_param("ss", $login, $email);
+            $stmt->execute();
+            $stmt->store_result();
 
-            if (password_verify($pass, $hashed_password)) 
+            if ($stmt->num_rows > 0) 
             {
-                
-                $_SESSION['loggedin'] = true;
-                $_SESSION['username'] = $username;
-                $_SESSION['user_id'] = $user_id;
+                $stmt->bind_result($user_id, $username, $hashed_password);
+                $stmt->fetch();
 
-                header("Location: Menu.php");
-                exit();
+                if (password_verify($pass, $hashed_password)) 
+                {
+                    $_SESSION['loggedin'] = true;
+                    $_SESSION['username'] = $username;
+                    $_SESSION['user_id'] = $user_id;
+
+                    header("Location: Menu.php");
+                    exit();
+                } 
+                else 
+                {
+                    $_SESSION['login_error'] = 'invalid_credentials';
+                }
             } 
             else 
             {
-                $_SESSION['login_error'] = true;
+                $_SESSION['login_error'] = 'invalid_credentials';
             }
-        } 
-        else 
-        {
-            $_SESSION['login_error'] = true;
+
+            $stmt->close();
         }
 
-        $stmt->close();
+        $connection->close();
     }
-
-    $connection->close();
 }
 ?>
 
@@ -74,7 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <?php
         if (isset($_SESSION['login_error'])) 
         {
-            echo '<p style="color: red;">Incorrect credentials. Please try again.</p>';
+            if ($_SESSION['login_error'] === 'empty_fields') {
+                echo '<p style="color: red;">All fields are required.</p>';
+            } else {
+                echo '<p style="color: red;">Incorrect credentials! Please try again.</p>';
+            }
             unset($_SESSION['login_error']);
         }
         ?>
@@ -82,20 +89,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <form action="LogIn.php" method="post">
             <p>
                 <label for="userName">Name:</label>
-                <input id="userName" type="text" placeholder="user name" name="userName" required>
+                <input id="userName" type="text" placeholder="user name" name="userName" required 
+                oninvalid="this.setCustomValidity('Please enter your username')" 
+                oninput="setCustomValidity('')">
             </p>
             <p>
                 <label for="userEmail">Email:</label>
-                <input id="userEmail" type="email" placeholder="user email" name="userEmail" required>
+                <input id="userEmail" type="email" placeholder="user email" name="userEmail" required 
+                oninvalid="this.setCustomValidity('Please enter a valid email address. An email should contain @, a domain, and a dot (e.g., example@domain.com).')" 
+                oninput="setCustomValidity('')">
             </p>
             <p>
                 <label for="userPass">Password:</label>
-                <input id="userPass" type="password" placeholder="password" name="userPass" required>
+                <input id="userPass" type="password" placeholder="password" name="userPass" required 
+                oninvalid="this.setCustomValidity('Please enter your password')" 
+                oninput="setCustomValidity('')">
             </p>
             <p>
-            <button class="buttonStyle">
-                <a href="Menu.php" type="button" class="button">Log In</a>
-            </button>
+              <button class="button buttonStyle" type="submit">Log In</button>
             </p>
         </form>
 
@@ -103,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
         <p>
             <button class="buttonStyle">
-                <a href="Registration.php" type="button" class="button">Back to Registration</a>
+                <a href="Registration.php" class="button">Back to Registration</a>
             </button>
         </p>
 

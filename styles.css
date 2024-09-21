@@ -19,7 +19,10 @@ h2 {
     font-weight: bold;
     font-size: 50px;
     font-family: 'Times New Roman', Times, serif;
-    color: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-image: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 label {
@@ -37,6 +40,25 @@ a {
 
 table {
     color: green;
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px auto;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: lightgreen;
+}
+
+td {
+    color: darkgreen;
 }
 
 .button {
@@ -57,6 +79,7 @@ table {
 
 .buttonStyle {
     width: 100%;
+    margin: 0 auto;
 }
 
 .button:before {
@@ -76,16 +99,12 @@ table {
     border-radius: 10px;
 }
 
-.button:active {
-    color: #000;
-}
-
-.button:active:after {
-    background: transparent;
-}
-
 .button:hover:before {
     opacity: 1;
+}
+
+.button:active {
+    color: #000;
 }
 
 .button:after {
@@ -115,10 +134,92 @@ table {
 }
 
 .gradient-text {
-    background-color: red;
     background-image: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-    background-size: 100%;
-    background-repeat: repeat;
     background-clip: text;
+    -webkit-background-clip: text;
     color: transparent;
+}
+
+.header {
+    color: gray;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: lightgreen;
+}
+
+td {
+    color: darkgreen;
+}
+
+.sum-label {
+    color: lightgreen;
+}
+
+.expense-label {
+    color: blue;
+}
+
+.expense-sum-label {
+    color: lightblue;
+}
+
+.balance-label {
+    color: red;
+    text-align: center;
+    font-size: 1.5em;
+    margin: 20px 0;
+}
+
+.summary-table {
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.summary-table th,
+.summary-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: lightgreen;
+}
+
+.blue {
+    color: blue;
+}
+
+.message {
+    color: yellow;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 10px;
 }

@@ -1,3 +1,115 @@
+<?php
+session_start();
+require_once "connect.php";
+
+function validate_password($password) 
+{
+    return preg_match('/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/', $password);
+}
+
+$error_message = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+{
+    if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['pass'])) 
+    {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $pass = $_POST['pass'];
+
+        if (!validate_password($pass)) 
+        {
+            $error_message = 'Password must be at least 8 characters long and include both letters and numbers.';
+        } 
+        else 
+        {
+            $connection = new mysqli($host, $db_user, $db_password, $db_name);
+
+            if ($connection->connect_errno != 0) 
+            {
+                echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
+            } 
+            else 
+            {
+                $stmt = $connection->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+                $stmt->bind_param("ss", $name, $email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) 
+                {
+                    $error_message = 'Username or email already exists.';
+                } 
+                else 
+                {
+                    $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
+                    $stmt = $connection->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+                    $stmt->bind_param("sss", $name, $email, $hashed_password);
+
+                    if ($stmt->execute()) 
+                    {
+                        $newUserId = $connection->insert_id;
+
+                        $defaultIncomesQuery = "SELECT name FROM incomes_category_default";
+                        $defaultIncomesResult = $connection->query($defaultIncomesQuery);
+
+                        if ($defaultIncomesResult->num_rows > 0) 
+                        {
+                            while ($row = $defaultIncomesResult->fetch_assoc()) 
+                            {
+                                $incomeCategoryName = $row['name'];
+                                $stmt = $connection->prepare("INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES (?, ?)");
+                                $stmt->bind_param("is", $newUserId, $incomeCategoryName);
+                                $stmt->execute();
+                            }
+                        }
+
+                        $defaultPaymentMethodsQuery = "SELECT name FROM payment_methods_default";
+                        $defaultPaymentMethodsResult = $connection->query($defaultPaymentMethodsQuery);
+
+                        if ($defaultPaymentMethodsResult->num_rows > 0) 
+                        {
+                            while ($row = $defaultPaymentMethodsResult->fetch_assoc()) 
+                            {
+                                $paymentMethodName = $row['name'];
+                                $stmt = $connection->prepare("INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES (?, ?)");
+                                $stmt->bind_param("is", $newUserId, $paymentMethodName);
+                                $stmt->execute();
+                            }
+                        }
+
+                        $defaultExpensesQuery = "SELECT name FROM expenses_category_default";
+                        $defaultExpensesResult = $connection->query($defaultExpensesQuery);
+
+                        if ($defaultExpensesResult->num_rows > 0) 
+                        {
+                            while ($row = $defaultExpensesResult->fetch_assoc()) 
+                            {
+                                $expensesCategoryName = $row['name'];
+                                $stmt = $connection->prepare("INSERT INTO expenses_category_assigned_to_users (user_id, name) VALUES (?, ?)");
+                                $stmt->bind_param("is", $newUserId, $expensesCategoryName);
+                                $stmt->execute();
+                            }
+                        }
+
+                        header("Location: LogIn.php");
+                        exit();
+                    } 
+                    else 
+                    {
+                        $error_message = 'Registration failed. Please try again.';
+                    }
+                    $stmt->close();
+                }
+                $stmt->close();
+            }
+            $connection->close();
+        }
+    } 
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,127 +128,30 @@
         <h2 class="gradient-text">For registration enter your data below</h2>
 
         <?php
-        session_start();
-        require_once "connect.php";
-
-        function validate_password($password) 
+        if (!empty($error_message)) 
         {
-            return preg_match('/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/', $password);
-        }
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST") 
-        {
-            if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['pass'])) 
-            {
-                $name = $_POST['name'];
-                $email = $_POST['email'];
-                $pass = $_POST['pass'];
-
-                if (!validate_password($pass)) 
-                {
-                    echo '<p style="color: red;">Password must be at least 8 characters long and include both letters and numbers.</p>';
-                } 
-                else 
-                {
-                    $connection = new mysqli($host, $db_user, $db_password, $db_name);
-
-                    if ($connection->connect_errno != 0) 
-                    {
-                        echo "Error: " . $connection->connect_errno . " Reason: " . $connection->connect_error;
-                    } 
-                    else 
-                    {
-                        $stmt = $connection->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-                        $stmt->bind_param("ss", $name, $email);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        if ($result->num_rows > 0) 
-                        {
-                            echo '<p style="color: red;">Username or email already exists.</p>';
-                        } 
-                        else 
-                        {
-                            $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
-
-                            $stmt = $connection->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-                            $stmt->bind_param("sss", $name, $email, $hashed_password);
-
-                            if ($stmt->execute()) 
-                            {
-                                $newUserId = $connection->insert_id;
-
-                                $defaultIncomesQuery = "SELECT name FROM incomes_category_default";
-                                $defaultIncomesResult = $connection->query($defaultIncomesQuery);
-
-                                if ($defaultIncomesResult->num_rows > 0) 
-                                {
-                                    while ($row = $defaultIncomesResult->fetch_assoc()) 
-                                    {
-                                        $incomeCategoryName = $row['name'];
-                                        $stmt = $connection->prepare("INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES (?, ?)");
-                                        $stmt->bind_param("is", $newUserId, $incomeCategoryName);
-                                        $stmt->execute();
-                                    }
-                                }
-
-                                $defaultPaymentMethodsQuery = "SELECT name FROM payment_methods_default";
-                                $defaultPaymentMethodsResult = $connection->query($defaultPaymentMethodsQuery);
-
-                                if ($defaultPaymentMethodsResult->num_rows > 0) 
-                                {
-                                    while ($row = $defaultPaymentMethodsResult->fetch_assoc()) 
-                                    {
-                                        $paymentMethodName = $row['name'];
-                                        $stmt = $connection->prepare("INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES (?, ?)");
-                                        $stmt->bind_param("is", $newUserId, $paymentMethodName);
-                                        $stmt->execute();
-                                    }
-                                }
-
-                                $defaultExpensesQuery = "SELECT name FROM expenses_category_default";
-                                $defaultExpensesResult = $connection->query($defaultExpensesQuery);
-
-                                if ($defaultExpensesResult->num_rows > 0) 
-                                {
-                                    while ($row = $defaultExpensesResult->fetch_assoc()) 
-                                    {
-                                        $expensesCategoryName = $row['name'];
-                                        $stmt = $connection->prepare("INSERT INTO expenses_category_assigned_to_users (user_id, name) VALUES (?, ?)");
-                                        $stmt->bind_param("is", $newUserId, $expensesCategoryName);
-                                        $stmt->execute();
-                                    }
-                                }
-
-                                header("Location: LogIn.php");
-                                exit();
-                            } 
-                            else 
-                            {
-                                echo '<p style="color: red;">Registration failed. Please try again.</p>';
-                            }
-                            $stmt->close();
-                        }
-                        $stmt->close();
-                    }
-                    $connection->close();
-                }
-            } 
+            echo '<p style="color: red;">' . $error_message . '</p>';
         }
         ?>
 
         <form action="Registration.php" method="post">
             <p>
                 <label for="name">Name:</label>
-                <input id="name" type="text" placeholder="name" name="name" required>
+                <input id="name" type="text" placeholder="name" name="name" required 
+                oninvalid="this.setCustomValidity('Please enter your name')" 
+                oninput="setCustomValidity('')">
             </p>
             <p>
                 <label for="email">Email:</label>
-                <input id="email" type="email" placeholder="email" name="email" required>
+                <input id="email" type="email" placeholder="email" name="email" required 
+                oninvalid="this.setCustomValidity('Please enter a valid email address. An email should contain @, a domain, and a dot (e.g., example@domain.com).')" 
+                oninput="setCustomValidity('')">
             </p>
             <p>
                 <label for="pass">Password:</label>
-                <input id="pass" type="password" placeholder="password" name="pass" required>
+                <input id="pass" type="password" placeholder="password" name="pass" required 
+                oninvalid="this.setCustomValidity('Please enter a valid password. The password must be at least 8 characters long and include both letters and numbers.')" 
+                oninput="setCustomValidity('')">
             </p>
             <p>
                 <button type="submit" class="button">Register</button>
