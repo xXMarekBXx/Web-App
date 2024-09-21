@@ -13,7 +13,6 @@
 <body>
     <main>
         <h1 class="gradient-text">Create an Account</h1>
-
         <h2 class="gradient-text">For registration enter your data below</h2>
 
         <?php
@@ -24,7 +23,6 @@
         {
             return preg_match('/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/', $password);
         }
-
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") 
         {
@@ -40,7 +38,6 @@
                 } 
                 else 
                 {
-
                     $connection = new mysqli($host, $db_user, $db_password, $db_name);
 
                     if ($connection->connect_errno != 0) 
@@ -67,6 +64,50 @@
 
                             if ($stmt->execute()) 
                             {
+                                $newUserId = $connection->insert_id;
+
+                                $defaultIncomesQuery = "SELECT name FROM incomes_category_default";
+                                $defaultIncomesResult = $connection->query($defaultIncomesQuery);
+
+                                if ($defaultIncomesResult->num_rows > 0) 
+                                {
+                                    while ($row = $defaultIncomesResult->fetch_assoc()) 
+                                    {
+                                        $incomeCategoryName = $row['name'];
+                                        $stmt = $connection->prepare("INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES (?, ?)");
+                                        $stmt->bind_param("is", $newUserId, $incomeCategoryName);
+                                        $stmt->execute();
+                                    }
+                                }
+
+                                $defaultPaymentMethodsQuery = "SELECT name FROM payment_methods_default";
+                                $defaultPaymentMethodsResult = $connection->query($defaultPaymentMethodsQuery);
+
+                                if ($defaultPaymentMethodsResult->num_rows > 0) 
+                                {
+                                    while ($row = $defaultPaymentMethodsResult->fetch_assoc()) 
+                                    {
+                                        $paymentMethodName = $row['name'];
+                                        $stmt = $connection->prepare("INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES (?, ?)");
+                                        $stmt->bind_param("is", $newUserId, $paymentMethodName);
+                                        $stmt->execute();
+                                    }
+                                }
+
+                                $defaultExpensesQuery = "SELECT name FROM expenses_category_default";
+                                $defaultExpensesResult = $connection->query($defaultExpensesQuery);
+
+                                if ($defaultExpensesResult->num_rows > 0) 
+                                {
+                                    while ($row = $defaultExpensesResult->fetch_assoc()) 
+                                    {
+                                        $expensesCategoryName = $row['name'];
+                                        $stmt = $connection->prepare("INSERT INTO expenses_category_assigned_to_users (user_id, name) VALUES (?, ?)");
+                                        $stmt->bind_param("is", $newUserId, $expensesCategoryName);
+                                        $stmt->execute();
+                                    }
+                                }
+
                                 header("Location: LogIn.php");
                                 exit();
                             } 

@@ -4,129 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balance sheet</title>
+    <title>Balance Sheet</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .header {
+            color: gray;
+        }
+    </style>
+    <script>
+        function toggleDateInputs() {
+            const periodSelect = document.getElementById('period');
+            const dateInputs = document.getElementById('dateInputs');
+            dateInputs.style.display = (periodSelect.value === 'Custom') ? 'block' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDateInputs(); // Initial check
+        });
+    </script>
 </head>
 
 <body>
 
     <main>
+        <?php
+        session_start();
+        $username = $_SESSION['username'] ?? 'Guest'; // Domyślnie 'Guest' jeśli nie ma w sesji
+        $userId = $_SESSION['user_id'] ?? 'N/A'; // Domyślnie 'N/A' jeśli nie ma w sesji
+        ?>
 
-        <form>
-            <h1> Your balance sheet</h1>
+        <h2 class="header">Balance Sheet User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
+
+        <form method="POST">
+            <h1>Your Balance Sheet</h1>
             <label for="periodSelection">Select a period:</label>
-            <select name="period" id="period" required>
+            <select name="period" id="period" required onchange="toggleDateInputs()">
                 <option value="Current month">Current month</option>
                 <option value="Last month">Last month</option>
                 <option value="Current year">Current year</option>
                 <option value="Custom">Custom</option>
             </select>
+
+            <div id="dateInputs" style="display: none;">
+                <p>
+                    <label for="startingDate">Enter the starting date:</label>
+                    <input id="startingDate" type="date" name="startingDate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" min="2000-01-01">
+                </p>
+                <p>
+                    <label for="endingDate">Enter the ending date:</label>
+                    <input id="endingDate" type="date" name="endingDate" value="<?php echo date('Y-m-d'); ?>" min="2000-01-01">
+                </p>
+            </div>
+
             <p>
-                <label for="date">Enter the starting date:</label>
-                <input id="startingDate" type="date" name="date" value="2021-08-07" min="2000-01-01">
-            </p>
-            <p>
-                <label for="date">Enter the ending date:</label>
-                <input id="endingDate" type="date" name="date" value="2022-08-07" min="2000-01-01">
+                <button class="buttonStyle">
+                    <a class="button">Show</a>
+                </button>
             </p>
 
-            <table>
-                <!-- zamkniecie naglowka w grupe -->
-                <thead>
-                    <tr>
-                        <!-- rowspan i colspan to zasiegi naglowkow tabeli -->
-                        <th colspan="3">Incomes</th>
-                    </tr>
-                    <tr>
-                        <!-- rowspan i colspan to zasiegi naglowkow tabeli -->
-                        <th rowspan="2">Salary</th>
-                        <th rowspan="2">Bank interest</th>
-                        <th rowspan="2">Sale on Allegro</th>
-                        <th rowspan="2">Other</th>
-                    </tr>
-                </thead>
-                <!-- zamkniecie ciała tabeli w grupe -->
-                <tbody>
-                    <!-- tr kolumny -->
-                    <tr>
-                        <!-- td wiersze -->
-                        <td>sum salary</td>
-                        <td>sum bank interest</td>
-                        <td>sum sale on allegro</td>
-                        <td>sum other</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p></p>
-            <table>
-
-                <!-- zamkniecie naglowka w grupe -->
-                <thead>
-                    <tr>
-                        <!-- rowspan i colspan to zasiegi naglowkow tabeli -->
-                        <th colspan="3">Expense</th>
-                    </tr>
-                    <tr>
-                        <!-- rowspan i colspan to zasiegi naglowkow tabeli -->
-                        <th rowspan="2">Food</th>
-                        <th rowspan="2">Apertment</th>
-                        <th rowspan="2">Transport</th>
-                        <th rowspan="2">Telecommunication</th>
-                        <th rowspan="2">Healthcare</th>
-                        <th rowspan="2">Clothes</th>
-                        <th rowspan="2">Hygiene</th>
-                        <th rowspan="2">Kids</th>
-                        <th rowspan="2">Entertainment</th>
-                        <th rowspan="2">Tour</th>
-                        <th rowspan="2">Trainings</th>
-                        <th rowspan="2">Books</th>
-                        <th rowspan="2">Savings</th>
-                        <th rowspan="2">For golden autumn - retirement</th>
-                        <th rowspan="2">Debt repayment</th>
-                        <th rowspan="2">Donation</th>
-                        <th rowspan="2">Other</th>
-                    </tr>
-                </thead>
-                <!-- zamkniecie ciała tabeli w grupe -->
-                <tbody>
-                    <!-- tr kolumny -->
-                    <tr>
-                        <!-- td wiersze -->
-                        <td>sum Food</td>
-                        <td>sum Apertment</td>
-                        <td>sum Transport</td>
-                        <td>sum Telecommunication</td>
-                        <td>sum Healthcare</td>
-                        <td>sum Clothes</td>
-                        <td>sum Hygiene</td>
-                        <td>sum Kids</td>
-                        <td>sum Entertainment</td>
-                        <td>sum Tour</td>
-                        <td>sum Trainings</td>
-                        <td>sum Books</td>
-                        <td>sum Savings</td>
-                        <td>sum Retirement</td>
-                        <td>sum Debt repayment</td>
-                        <td>sum Donation</td>
-                        <td>sum other</td>
-                    </tr>
-                </tbody>
-            </table>
             <p>
-                <label for="date">Balance:</label>
+                <label for="balance">Balance:</label>
             </p>
             <p>
-                <label for="date">Be careful, you are in debt!</label>
+                <label for="debtWarning">Be careful, you are in debt!</label>
             </p>
             <p>
-                <label for="date">Congratulations. You manage your finances great!</label>
+                <label for="congratulations">Congratulations. You manage your finances great!</label>
             </p>
-            <button class="buttonStyle">
-                <a href="Menu.php" type="button" class="button">Back to Menu</a>
-            </button>
         </form>
 
+        <form>
+            <p>
+                <button class="buttonStyle">
+                    <a href="Menu.php" class="button">Back to Menu</a>
+                </button>
+            </p>
+        </form>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"

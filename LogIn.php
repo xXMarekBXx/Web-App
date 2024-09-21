@@ -92,19 +92,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                 <label for="userPass">Password:</label>
                 <input id="userPass" type="password" placeholder="password" name="userPass" required>
             </p>
-
             <p>
-                <button type="submit" class="button">Log In</button>
+            <button class="buttonStyle">
+                <a href="Menu.php" type="button" class="button">Log In</a>
+            </button>
             </p>
         </form>
 
         <h2 class="gradient-text">If not, register here</h2>
 
-        <form action="Registration.php" method="post">
-            <p>
-                <button type="submit" class="button">Back to Registration</button>
-            </p>
-        </form>
+        <p>
+            <button class="buttonStyle">
+                <a href="Registration.php" type="button" class="button">Back to Registration</a>
+            </button>
+        </p>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"

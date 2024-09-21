@@ -2,6 +2,8 @@
 session_start();
 require_once "connect.php";
 
+$userId = $_SESSION['user_id'];
+
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) 
 {
     header("Location: LogIn.php");
@@ -46,12 +48,14 @@ $connection->close();
 </head>
 
 <body>
-    <main>
+    <main> 
+        <h2>Logged In User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
+
         <?php
         
         if (isset($_SESSION['username']) && isset($_SESSION['user_id'])) 
         {
-            echo '<h1 class="gradient-text">Welcome, ' . htmlspecialchars($_SESSION['username']) . '! Your ID: ' . htmlspecialchars($_SESSION['user_id']) . '</h1>';
+            echo '<h1 class="gradient-text">Welcome, ' . htmlspecialchars($_SESSION['username']). '!</h1>';
             echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
             echo '<h1 class="gradient-text">MENU</h1>';
             echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
@@ -62,12 +66,12 @@ $connection->close();
 
         <p>
             <button class="buttonStyle">
-                <a href="Income.php" type="button" class="button">Add Income</a>
+                <a href="Incomes.php" type="button" class="button">Add Income</a>
             </button>
         </p>
         <p>
             <button class="buttonStyle">
-                <a href="Expense.php" type="button" class="button">Add Expense</a>
+                <a href="Expenses.php" type="button" class="button">Add Expense</a>
             </button>
         </p>
         <p>
@@ -80,13 +84,11 @@ $connection->close();
                 <a href="Settings.php" type="button" class="button">Settings</a>
             </button>
         </p>
-
-        <form action="Menu.php" method="post">
-            <input type="hidden" name="logout" value="true">
-            <p>
-                <button type="submit" class="button">Log Out</button>
-            </p>
-        </form>
+        <p>
+            <button class="buttonStyle">
+                <a href="LogIn.php" type="button" class="button">Log Out</a>
+            </button>
+        </p>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
