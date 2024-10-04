@@ -1,96 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balance Sheet</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .header {
-            color: gray;
-        }
-        .table-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: black;
-            color: lightgreen;
-        }
-        td {
-            color: darkgreen;
-        }
-        .sum-label {
-            color: lightgreen;
-        }
-        .expense-label {
-            color: blue;
-        }
-        .expense-sum-label {
-            color: lightblue;
-        }
-        .balance-label {
-            color: red;
-            text-align: center;
-            font-size: 1.5em;
-            margin: 20px 0;
-        }
-        .summary-table {
-            width: 80%;
-            margin: 0 auto;
-            border: 1px solid #ddd;
-            border-collapse: collapse;
-        }
-        .summary-table th, .summary-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        .red {
-            color: red;
-        }
-        .green {
-            color: lightgreen;
-        }
-        .blue {
-            color: blue;
-        }
-        .message {
-            color: yellow;
-            text-align: center;
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
-    </style>
-    <script>
-        function toggleDateInputs() {
-            const periodSelect = document.getElementById('period');
-            const dateInputs = document.getElementById('dateInputs');
-            dateInputs.style.display = (periodSelect.value === 'Custom') ? 'block' : 'none';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleDateInputs();
-        });
-    </script>
-</head>
-
-<body>
-
-    <main>
-        <?php
+<?php
         session_start();
         require_once "connect.php";
 
@@ -136,7 +44,7 @@
             $stmt = $connection->prepare("
                 SELECT i.id, i.amount, i.date_of_income, i.income_comment, 
                        c.name AS category_name 
-                FROM Incomes i 
+                FROM incomes i 
                 JOIN incomes_category_assigned_to_users c ON i.income_category_assigned_to_user_id = c.id 
                 WHERE i.user_id = ? AND i.date_of_income BETWEEN ? AND ?
             ");
@@ -159,7 +67,7 @@
             $stmt = $connection->prepare("
                 SELECT e.id, e.amount, e.date_of_expense, e.expense_comment, 
                        c.name AS category_name 
-                FROM Expenses e 
+                FROM expenses e 
                 JOIN expenses_category_assigned_to_users c ON e.expense_category_assigned_to_user_id = c.id 
                 WHERE e.user_id = ? AND e.date_of_expense BETWEEN ? AND ?
             ");
@@ -181,11 +89,104 @@
         }
         ?>
 
-        <h2 class="header">Balance Sheet User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Sheet</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .header {
+            color: gray;
+        }
+        .table-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: black;
+            color: lightgreen;
+        }
+        td {
+            color: darkgreen;
+        }
+        .sum-label {
+            color: lightgreen;
+        }
+        .expense-label {
+            color: blue;
+        }
+        .expense-sum-label {
+            color: blue;
+        }
+        .balance-label {
+            color: red;
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .summary-table {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+        .summary-table th, .summary-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .red {
+            color: red;
+        }
+        .green {
+            color: lightgreen;
+        }
+        .blue {
+            color: blue;
+        }
+        .message {
+            color: yellow;
+            text-align: center;
+            font-size: 2.5em;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function toggleDateInputs() {
+            const periodSelect = document.getElementById('period');
+            const dateInputs = document.getElementById('dateInputs');
+            dateInputs.style.display = (periodSelect.value === 'Custom') ? 'block' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDateInputs();
+        });
+    </script>
+</head>
+
+<body>
+
+    <main>        
+
+        <h4 style="color: gray;">Balance Sheet User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h4>
 
         <form method="POST">
             <h1>Your Balance Sheet</h1>
-            <label for="periodSelection">Select a period:</label>
+            <label for="periodSelection">Select a period:</label>            
             <select name="period" id="period" required onchange="toggleDateInputs()">
                 <option value="Current month">Current month</option>
                 <option value="Last month">Last month</option>
@@ -204,6 +205,7 @@
                 </p>
             </div>
 
+            <h3 style="color: lightblue;">And then confirm your selection with the button below:</h3>
             <p>
                 <button class="buttonStyle">
                     <a href="#" onclick="this.closest('form').submit(); return false;" class="button">Show</a>
@@ -212,8 +214,9 @@
         </form>
 
         <p>
-            <label for="incomesLabel" class="green">Incomes:</label>
+            <label for="incomesLabel" class="green"></label>
         </p>
+        <h2 style="color: lightgreen;">Incomes:</h2>
 
         <div class="table-container">
             <?php if ($resultIncomes): ?>
@@ -275,28 +278,29 @@
         <?php endif; ?>
 
         <p>
-            <label for="expensesLabel" class="expense-label">Expenses:</label>
+            <label for="expensesLabel" class="expense-label"></label>
         </p>
+        <h2 style="color: blue;">Expenses:</h2>
 
         <div class="table-container">
             <?php if ($resultExpenses): ?>
                 <table>
                     <tr>
-                        <th>ID</th>
-                        <th>Amount</th>
-                        <th>Category</th>
-                        <th>Date</th>
-                        <th>Comment</th>
+                        <th class="blue">ID</th>
+                        <th class="blue">Amount</th>
+                        <th class="blue">Category</th>
+                        <th class="blue">Date</th>
+                        <th class="blue">Comment</th>
                     </tr>
                     <?php
                     $resultExpenses->data_seek(0);
                     while ($row = $resultExpenses->fetch_assoc()): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($row['id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['amount']); ?></td>
-                            <td><?php echo htmlspecialchars($row['category_name']); ?></td>
-                            <td><?php echo htmlspecialchars($row['date_of_expense']); ?></td>
-                            <td><?php echo htmlspecialchars($row['expense_comment']); ?></td>
+                            <td style="color: lightblue;"><?php echo htmlspecialchars($row['id']); ?></td>
+                            <td style="color: lightblue;"><?php echo htmlspecialchars($row['amount']); ?></td>
+                            <td style="color: lightblue;"><?php echo htmlspecialchars($row['category_name']); ?></td>
+                            <td style="color: lightblue;"><?php echo htmlspecialchars($row['date_of_expense']); ?></td>
+                            <td style="color: lightblue;"><?php echo htmlspecialchars($row['expense_comment']); ?></td>
                         </tr>
                     <?php endwhile; ?>
                     <tr>
@@ -315,17 +319,17 @@
                             <th colspan="4" style="text-align: center;"><?php echo htmlspecialchars($category); ?></th>
                         </tr>
                         <tr>
-                            <th>ID</th>
-                            <th>Amount</th>
-                            <th>Date</th>
-                            <th>Comment</th>
+                            <th class="blue">ID</th>
+                            <th class="blue">Amount</th>
+                            <th class="blue">Date</th>
+                            <th class="blue">Comment</th>
                         </tr>
                         <?php foreach ($data['items'] as $item): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($item['id']); ?></td>
-                                <td><?php echo htmlspecialchars($item['amount']); ?></td>
-                                <td><?php echo htmlspecialchars($item['date_of_expense']); ?></td>
-                                <td><?php echo htmlspecialchars($item['expense_comment']); ?></td>
+                                <td style="color: lightblue;"><?php echo htmlspecialchars($item['id']); ?></td>
+                                <td style="color: lightblue;"><?php echo htmlspecialchars($item['amount']); ?></td>
+                                <td style="color: lightblue;"><?php echo htmlspecialchars($item['date_of_expense']); ?></td>
+                                <td style="color: lightblue;"><?php echo htmlspecialchars($item['expense_comment']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
@@ -337,16 +341,17 @@
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <div class="balance-label">BALANCE</div>
+        <div class="balance-label"></div>
+        <h2 style="color: red;">BALANCE</h2>
         
         <table class="summary-table">
             <tr>
                 <th class="green">Incomes</th>
-                <th class="blue">Expenses</th>
+                <th style="color: blue;">Expenses</th>
             </tr>
-            <tr>
+            <tr>            
                 <td><?php echo number_format($totalIncomesAmount, 2, ',', ' '); ?></td>
-                <td><?php echo number_format($totalExpensesAmount, 2, ',', ' '); ?></td>
+                <td style="color: lightblue;"><?php echo number_format($totalExpensesAmount, 2, ',', ' '); ?></td>
             </tr>
             <tr>
                 <th class="red">Difference</th>
@@ -358,6 +363,8 @@
                 </th>
             </tr>
         </table>
+        
+        <br></br>
 
         <div class="message">
             <?php if ($difference >= 0): ?>

@@ -29,7 +29,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Unknown User
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 col-md-12">                    
-                    <h2>Settings for User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
+                    <h4 style="color: gray;">Settings for User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h4>
                 </div>
 
                 <div class="col-sm-12 col-md-12">

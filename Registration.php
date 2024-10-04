@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                             }
                         }
 
-                        header("Location: LogIn.php");
+                        header("Location: index.php");
                         exit();
                     } 
                     else 
@@ -120,6 +120,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <style>
+        /* Dodatkowy styl, aby wyrównać pola Name, Email i Password */
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .form-group label {
+            width: 150px; /* Ustal stałą szerokość dla etykiet */
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        .form-group input {
+            width: 250px; /* Ustal szerokość dla pól tekstowych */
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body>
@@ -135,24 +156,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         ?>
 
         <form action="Registration.php" method="post">
-            <p>
+            <div class="form-group">
                 <label for="name">Name:</label>
                 <input id="name" type="text" placeholder="name" name="name" required 
                 oninvalid="this.setCustomValidity('Please enter your name')" 
                 oninput="setCustomValidity('')">
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 <label for="email">Email:</label>
                 <input id="email" type="email" placeholder="email" name="email" required 
                 oninvalid="this.setCustomValidity('Please enter a valid email address. An email should contain @, a domain, and a dot (e.g., example@domain.com).')" 
                 oninput="setCustomValidity('')">
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 <label for="pass">Password:</label>
                 <input id="pass" type="password" placeholder="password" name="pass" required 
                 oninvalid="this.setCustomValidity('Please enter a valid password. The password must be at least 8 characters long and include both letters and numbers.')" 
                 oninput="setCustomValidity('')">
-            </p>
+            </div>
             <p>
                 <button type="submit" class="button">Register</button>
             </p>
@@ -161,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <h3 class="gradient-text">If you have an account, go to the Login page</h3>
 
         <p>
-            <a href="LogIn.php" class="button">Go Back</a>
+            <a href="index.php" class="button">Go Back</a>
         </p>
         
     </main>

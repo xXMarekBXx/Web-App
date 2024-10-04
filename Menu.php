@@ -6,7 +6,7 @@ $userId = $_SESSION['user_id'];
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) 
 {
-    header("Location: LogIn.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -23,7 +23,7 @@ else
         if (isset($_POST['logout']) && $_POST['logout'] == 'true') {
             session_unset();
             session_destroy();
-            header("Location: LogIn.php");
+            header("Location: index.php");
             exit();
         }
     }
@@ -49,19 +49,9 @@ $connection->close();
 
 <body>
     <main> 
-        <h2>Logged In User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
 
-        <?php
-        
-        if (isset($_SESSION['username']) && isset($_SESSION['user_id'])) 
-        {
-            echo '<h1 class="gradient-text">Welcome, ' . htmlspecialchars($_SESSION['username']). '!</h1>';
-            echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
-            echo '<h1 class="gradient-text">MENU</h1>';
-            echo '<h1 class="gradient-text">-----------------------------------------------------</h1>';
-        } 
-        ?>
-
+        <h4 style="color: gray;">Logged In User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h4>
+       
         <h2 class="gradient-text">Choose one of the options:</h2>
 
         <p>
@@ -86,7 +76,7 @@ $connection->close();
         </p>
         <p>
             <button class="buttonStyle">
-                <a href="LogIn.php" type="button" class="button">Log Out</a>
+                <a href="index.php" type="button" class="button">Log Out</a>
             </button>
         </p>
     </main>

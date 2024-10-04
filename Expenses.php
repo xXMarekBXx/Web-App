@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     if ($amount > 0 && !empty($date) && !empty($categoryId) && !empty($paymentMethodId)) 
     {
         $stmt = $connection->prepare("INSERT INTO expenses (user_id, expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, amount, date_of_expense, expense_comment) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iiidsi", $userId, $categoryId, $paymentMethodId, $amount, $date, $comment);
+        $stmt->bind_param("iiidss", $userId, $categoryId, $paymentMethodId, $amount, $date, $comment);
 
         if ($stmt->execute()) 
         {
@@ -85,11 +85,36 @@ $connection->close();
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <style>
+        .form-group 
+        {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .form-group label 
+        {
+            width: 150px;
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        .form-group input,
+        .form-group select, 
+        .form-group textarea 
+        {
+            width: 250px;
+            padding: 5px;
+            font-size: 16px;
+        }        
+    </style>
 </head>
 
 <body>
     <main>
-        <h2>Expenses User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
+        <h4 style="color: gray;">Expenses User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h4>
 
         <h1>Add Expense</h1>
 
@@ -101,32 +126,31 @@ $connection->close();
         <?php endif; ?>
 
         <form action="Expenses.php" method="post">
-            <p>
+
+            <div class="form-group">            
                 <label for="amount">Amount:</label>
                 <input id="amount" type="number" placeholder="amount" name="amount" step="0.01" min="0" required>
-            </p>
-            <p>
+            </div>
+            <div class="form-group">  
                 <label for="date">Enter the Expenses date:</label>
                 <input id="date" type="date" name="date" value="<?php echo date('Y-m-d'); ?>" min="2000-01-01" required>
-            </p>
-
-            <p>
+            </div>
+            <div class="form-group"> 
                 <label for="selectItem">Select Category:</label>
                 <select name="selectItem" id="selectItem" required>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?php echo htmlspecialchars($category['id']); ?>"><?php echo htmlspecialchars($category['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
-            </p>
-
-            <p>
+            </div>
+            <div class="form-group"> 
                 <label for="selectPaymentMethod">Select Payment Method:</label>
                 <select name="selectPaymentMethod" id="selectPaymentMethod" required>
                     <?php foreach ($paymentMethods as $method): ?>
                         <option value="<?php echo htmlspecialchars($method['id']); ?>"><?php echo htmlspecialchars($method['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
-            </p>
+            </div>
 
             <p>
                 <label for="comment">Comment:</label>

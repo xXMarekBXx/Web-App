@@ -69,11 +69,37 @@ $connection->close();
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <style>
+        .form-group 
+        {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .form-group label 
+        {
+            width: 150px;
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        .form-group input,
+        .form-group select, 
+        .form-group textarea 
+        {
+            width: 250px;
+            padding: 5px;
+            font-size: 16px;
+        }        
+    </style>
 </head>
 
 <body>
     <main>
-        <h2>Incomes User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h2>
+
+        <h4 style="color: gray;">Incomes User: <?php echo htmlspecialchars($username); ?> (ID: <?php echo htmlspecialchars($userId); ?>)</h4>
 
         <h1>Add Income</h1>       
 
@@ -88,23 +114,26 @@ $connection->close();
         }
         ?>
 
-        <form action="Incomes.php" method="post">
-            <p>
+        <form action="Incomes.php" method="post">       
+
+            <div class="form-group">            
                 <label for="amount">Amount:</label>
                 <input id="amount" type="number" placeholder="amount" name="amount" step="0.01" min="0" required>
-            </p>
-            <p>
+            </div>
+            
+            <div class="form-group">    
                 <label for="date">Enter the Incomes date:</label>
                 <input id="date" type="date" name="date" value="<?php echo date('Y-m-d'); ?>" min="2000-01-01" required>
-            </p>
-            <p>
+            </div>
+                
+            <div class="form-group"> 
                 <label for="selectCategory">Select Category:</label>
                 <select name="selectCategory" id="selectCategory" required>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?php echo htmlspecialchars($category['id']); ?>"><?php echo htmlspecialchars($category['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
-            </p>
+            </div>
             <p>
                 <label for="comment">Comment:</label>
                 <p>
